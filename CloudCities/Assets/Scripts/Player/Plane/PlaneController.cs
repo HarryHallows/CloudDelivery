@@ -103,7 +103,7 @@ public class PlaneController : MonoBehaviour
    
     private void PlaneMovement()
     {
-        rb.velocity = new Vector3(horizontal, rb.velocity.y, rb.velocity.z) * moveSpeed;
+        //rb.velocity = new Vector3(horizontal, rb.velocity.y, rb.velocity.z) * moveSpeed;
 
         transform.position += transform.forward * moveSpeed * Time.deltaTime;
 
@@ -124,20 +124,22 @@ public class PlaneController : MonoBehaviour
                 rb.useGravity = false;
             }
         }
-        else if(transform.rotation.eulerAngles.x < 30 && transform.rotation.eulerAngles.x > -30)
+
+        if (transform.rotation.eulerAngles.x < 30 && transform.rotation.eulerAngles.x > -30)
         {
             if (moveSpeed < startMoveSpeed)
             {
-                moveSpeed += startMoveSpeed;
+                moveSpeed += Time.deltaTime;
 
                 if (moveSpeed == startMoveSpeed)
                 {
                     moveSpeed = startMoveSpeed;
                 }
             }
-            else
+            
+            if(moveSpeed > startMoveSpeed)
             {
-                moveSpeed -= startMoveSpeed;
+                moveSpeed -= Time.deltaTime;
 
                 if (moveSpeed == startMoveSpeed)
                 {
@@ -146,6 +148,5 @@ public class PlaneController : MonoBehaviour
             }
         }
 
-        Debug.Log(rb.velocity);
     }
 }
