@@ -31,6 +31,24 @@ public class CameraFollow : MonoBehaviour
         Vector3 desiredPosition = followTarget.position + offsetPosition;
         Vector3 smoothPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
 
+        if (followTarget.gameObject.name == "PlayerPlane")
+        {
+            if (followTarget.gameObject.GetComponent<PlaneController>().takeOff == true)
+            {
+                offsetPosition.z -= 5f * Time.deltaTime;
+
+                if (offsetPosition.z <= -20f)
+                {
+                    Debug.Log("I SHOULD CLMAP PLEASE!!!");
+                    offsetPosition.z = -20f;
+                }
+            }
+            else
+            {
+                offsetPosition.z = -10f;
+            }
+            
+        }
 
         if (followTarget == null || lookAtTarget == null)
         {
@@ -59,5 +77,11 @@ public class CameraFollow : MonoBehaviour
             Debug.Log(lookAtTarget);
             transform.rotation = lookAtTarget.rotation;
         }
+    }
+
+    public void TargetSwitch(Transform target)
+    {
+        followTarget = target;
+        lookAtTarget = target;
     }
 }
