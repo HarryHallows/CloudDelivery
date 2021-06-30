@@ -29,7 +29,7 @@ public class CameraFollow : MonoBehaviour
     public void Refresh()
     {
         Vector3 desiredPosition = followTarget.position + offsetPosition;
-        Vector3 smoothPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.deltaTime);
+        Vector3 smoothPosition = Vector3.Lerp(transform.position, desiredPosition, smoothSpeed * Time.captureFramerate);
 
         if (followTarget.gameObject.name == "PlayerPlane")
         {

@@ -14,13 +14,13 @@ public class PlayerHumanController : MonoBehaviour
     private float vertical;
     
     //Movements
-    private float moveSpeed, jumpHeight;
-    private float gravityAmount;
+    [SerializeField] private float moveSpeed, jumpHeight;
+    [SerializeField] private float gravityAmount;
 
     private Vector3 movement;
     private Vector3 playerVelocity;
 
-    private bool sprint, playerGrounded;
+    [SerializeField] private bool sprint, playerGrounded;
 
     [SerializeField] private Animator anim;
 
@@ -44,9 +44,22 @@ public class PlayerHumanController : MonoBehaviour
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
 
+        if (Input.GetKey(KeyCode.LeftShift))
+        {
+            if (sprint == false)
+            {
+                sprint = true;
+            }
+
+            if(sprint == true)
+            {
+                sprint = false;
+            }
+        }
+
         movement = new Vector3(horizontal, 0, vertical);
 
-        if (movement != Vector3.zero)
+        if (horizontal != 0 || vertical != 0)
         {
             GroundedMovement();
         }

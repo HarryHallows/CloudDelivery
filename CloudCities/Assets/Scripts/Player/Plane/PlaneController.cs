@@ -94,7 +94,7 @@ public class PlaneController : MonoBehaviour
 
             #region Assisted Tilt Shifting to ease into a position on release
             //Smooth out to 0 on the horizontal axis 
-            if (horizontal == 0)
+           /* if (horizontal == 0)
             {
                 if ((transform.rotation.eulerAngles.z < 45f && transform.rotation.eulerAngles.z > 0) || (transform.rotation.eulerAngles.z > 315f && transform.rotation.eulerAngles.z < 360f))
                 {
@@ -126,7 +126,7 @@ public class PlaneController : MonoBehaviour
 
                 // Smoothly move the camera towards that target position
                 transform.rotation = Quaternion.Slerp(transform.rotation, targetHorizontalRotation, smoothTime);
-            }
+            }*/
             #endregion
 
             if (horizontal != 0 || vertical != 0)
@@ -134,45 +134,6 @@ public class PlaneController : MonoBehaviour
                 transform.Rotate(vertical, 0f, -horizontal);
             }
         }
-        
-
-        #region Assisted Tilt Shifting to ease into a position on release
-        //Smooth out to 0 on the horizontal axis 
-        if (horizontal == 0)
-        {
-            if ((transform.rotation.eulerAngles.z < 45f && transform.rotation.eulerAngles.z > 0) || (transform.rotation.eulerAngles.z > 315f  && transform.rotation.eulerAngles.z < 360f))
-            {
-                Debug.Log("North Position");
-                // Define a target position above and behind the target transform
-                targetHorizontalRotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0);
-            }
-            else if(transform.rotation.eulerAngles.z > 45f && transform.rotation.eulerAngles.z < 135f)
-            {
-                Debug.Log("West Position");
-                // Define a target position above and behind the target transform
-                targetHorizontalRotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 90f);
-            }
-            else if(transform.rotation.eulerAngles.z > 135f && transform.rotation.eulerAngles.z < 225)
-            {
-                Debug.Log("South Position");
-                // Define a target position above and behind the target transform
-                targetHorizontalRotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 180f);
-            }
-            else if (transform.rotation.eulerAngles.z > 225f && transform.rotation.eulerAngles.z < 315f)
-            {
-                Debug.Log("East Position");
-                // Define a target position above and behind the target transform
-                targetHorizontalRotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, -90f);
-            }
-
-           // Debug.Log(transform.rotation.eulerAngles.z);
-
-
-            // Smoothly move the camera towards that target position
-             transform.rotation = Quaternion.Slerp(transform.rotation, targetHorizontalRotation, smoothTime);
-        }
-        #endregion
-
        
     }
 
