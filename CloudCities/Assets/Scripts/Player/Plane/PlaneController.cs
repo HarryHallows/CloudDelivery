@@ -6,7 +6,7 @@ using UnityEngine;
 public class PlaneController : MonoBehaviour
 {
 
-    [SerializeField] CharacterController playerCharacter;
+    [SerializeField] PlayerController playerCharacter;
 
     [SerializeField] private Camera cam;
     
@@ -17,7 +17,7 @@ public class PlaneController : MonoBehaviour
 
     public float smoothTime;
     [SerializeField] private float thrust;
-    [SerializeField] public float moveSpeed;
+    [SerializeField] public float moveSpeed, minMoveSpeed, maxMoveSpeed;
     [SerializeField] private float startMoveSpeed;
 
     private Vector3 velocity = Vector3.zero;
@@ -31,6 +31,8 @@ public class PlaneController : MonoBehaviour
     public Transform planeModel;
 
     public bool landed, takeOff;
+    public bool excellerating, decellerating;
+
 
     private void Awake()
     {
@@ -40,7 +42,7 @@ public class PlaneController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        playerCharacter = FindObjectOfType<CharacterController>();
+        playerCharacter = FindObjectOfType<PlayerController>();
         cam.GetComponent<CameraFollow>().FollowTarget(gameObject.transform);
     }
 
@@ -77,6 +79,7 @@ public class PlaneController : MonoBehaviour
                 transform.position += transform.forward * thrust * Time.deltaTime;
                 thrust += Time.deltaTime * 10;
             }
+
             if (thrust > startMoveSpeed)
             {
                 takeOff = true;
@@ -90,6 +93,50 @@ public class PlaneController : MonoBehaviour
             if (horizontal != 0 || vertical != 0)
             {
                 transform.Rotate((vertical), 0f, -horizontal * 2);
+            }
+
+            if (Input.GetKey(KeyCode.LeftControl))
+            {
+                if (decellerating == true)
+                {
+                    if (moveSpeed < minMoveSpeed)
+                    {
+                        decellerating = false;
+                        moveSpeed -= Time.deltaTime;
+                    }
+                }
+                else
+                {
+                    decellerating = true;
+                    excellerating = false;
+                }
+
+            }
+            else
+            {
+                decellerating = false;
+            }
+
+            if (Input.GetKey(KeyCode.LeftShift))
+            {
+                if (excellerating == true)
+                {
+                    moveSpeed += Time.deltaTime;
+
+                    if (moveSpeed > maxMoveSpeed)
+                    {
+                        excellerating = false;
+                    }
+                }
+                else
+                {
+                    excellerating = true;
+                    decellerating = false;
+                }
+            }
+            else
+            {
+                excellerating = false;
             }
 
             #region Assisted Tilt Shifting to ease into a position on release

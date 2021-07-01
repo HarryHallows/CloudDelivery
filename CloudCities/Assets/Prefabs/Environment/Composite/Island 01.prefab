@@ -128,6 +128,7 @@ GameObject:
   - component: {fileID: 5288661442196248731}
   - component: {fileID: 5288661442196248730}
   - component: {fileID: 5288661442196248733}
+  - component: {fileID: 38346416881762042}
   m_Layer: 0
   m_Name: Big Floating Rock
   m_TagString: Untagged
@@ -143,7 +144,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5288661442196248732}
   m_LocalRotation: {x: -0, y: 0.782899, z: -0, w: 0.6221489}
-  m_LocalPosition: {x: -6.414242, y: 32.066765, z: -69.387665}
+  m_LocalPosition: {x: -6.414242, y: 32.066765, z: -69.38766}
   m_LocalScale: {x: 43, y: 1, z: 8}
   m_Children: []
   m_Father: {fileID: 5288661442451226801}
@@ -1689,6 +1690,25 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 0}
+--- !u!95 &38346416881762042
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5288661442196248732}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: f45ba101d80f47541818521dd96b055b, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &5288661442348159179
 GameObject:
   m_ObjectHideFlags: 0
@@ -1866,6 +1886,25 @@ Transform:
   m_Father: {fileID: 5288661442546009690}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!95 &7141802774325588644
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5288661442542735359}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 5e5cb2a181e171a4bbc73516147c6e69, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorControllerStateOnDisable: 0
 --- !u!1 &5288661442546009693
 GameObject:
   m_ObjectHideFlags: 0
@@ -2850,7 +2889,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8291246531048946106, guid: 8b6133a00d5409e40acbac2a3bac19ca, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.41197586
+      value: 0.4119759
       objectReference: {fileID: 0}
     - target: {fileID: 8291246531048946106, guid: 8b6133a00d5409e40acbac2a3bac19ca, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2905,6 +2944,11 @@ PrefabInstance:
 --- !u!4 &5288661442542735352 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8291246531048946106, guid: 8b6133a00d5409e40acbac2a3bac19ca, type: 3}
+  m_PrefabInstance: {fileID: 4212401966632678978}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &5288661442542735359 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8291246531048946109, guid: 8b6133a00d5409e40acbac2a3bac19ca, type: 3}
   m_PrefabInstance: {fileID: 4212401966632678978}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4426021841713622449
