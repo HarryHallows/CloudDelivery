@@ -41,7 +41,7 @@ public class ObjectPool : MonoBehaviour
         }
     }
 
-    public GameObject SpawnFromPool(string tag, Vector2 position)
+    public GameObject SpawnFromPool(string tag, Vector3 position)
     {
         if (!poolDictionary.ContainsKey(tag))
         {
