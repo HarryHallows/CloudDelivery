@@ -27,7 +27,9 @@ public class PlayerHumanController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        cam.GetComponent<CameraFollow>().TargetSwitch(gameObject.transform);
+        cam.GetComponent<CameraFollow>().FollowTarget(gameObject.transform);
+        cam.GetComponent<CameraFollow>().LookAtTarget(gameObject.transform);
+
         controller = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();    
     }
