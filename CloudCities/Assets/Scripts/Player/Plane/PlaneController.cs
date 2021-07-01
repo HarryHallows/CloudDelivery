@@ -194,7 +194,7 @@ public class PlaneController : MonoBehaviour
 
     private void PlaneLanding()
     {
-        Debug.Log("I AM TRYING TO LAND??");
+      //  Debug.Log("I AM TRYING TO LAND??");
 
         if (landed == true)
         {
