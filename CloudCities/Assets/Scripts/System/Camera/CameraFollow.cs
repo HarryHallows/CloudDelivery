@@ -79,9 +79,13 @@ public class CameraFollow : MonoBehaviour
         }
     }
 
-    public void TargetSwitch(Transform target)
+    public void FollowTarget(Transform target)
     {
         followTarget = target;
+    }
+
+    public void LookAtTarget(Transform target)
+    {
         lookAtTarget = target;
     }
 }

@@ -11,8 +11,8 @@ public class PlaneController : MonoBehaviour
     [SerializeField] private Camera cam;
     
     //Inputs
-    [SerializeField] private float horizontal;
-    [SerializeField] private float vertical;
+    [SerializeField] public float horizontal;
+    [SerializeField] public float vertical;
 
 
     public float smoothTime;
@@ -41,7 +41,7 @@ public class PlaneController : MonoBehaviour
     void Start()
     {
         playerCharacter = FindObjectOfType<CharacterController>();
-        cam.GetComponent<CameraFollow>().TargetSwitch(gameObject.transform);
+        cam.GetComponent<CameraFollow>().FollowTarget(gameObject.transform);
     }
 
     // Update is called once per frame
