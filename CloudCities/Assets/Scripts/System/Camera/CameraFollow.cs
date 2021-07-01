@@ -35,12 +35,61 @@ public class CameraFollow : MonoBehaviour
         {
             if (followTarget.gameObject.GetComponent<PlaneController>().takeOff == true)
             {
-                offsetPosition.z -= 5f * Time.deltaTime;
-
-                if (offsetPosition.z <= -20f)
+                if (followTarget.gameObject.GetComponent<PlaneController>().decellerating == true)
                 {
-                    Debug.Log("I SHOULD CLMAP PLEASE!!!");
-                    offsetPosition.z = -20f;
+                    offsetPosition.z += 5f * Time.deltaTime;
+
+                    Debug.Log("decreasing distance due to speed decrease");
+
+                    if (offsetPosition.z >= -5f)
+                    {
+                        offsetPosition.z = -5f;
+                    }
+                }
+
+                if (followTarget.gameObject.GetComponent<PlaneController>().excellerating == true)
+                {
+                    offsetPosition.z -= 5f * Time.deltaTime;
+
+                    Debug.Log("Increasing distance due to speed increase");
+
+                    if (offsetPosition.z <= -30f)
+                    {
+                       
+                        offsetPosition.z = -30f;
+                    }
+                }
+
+                if (followTarget.gameObject.GetComponent<PlaneController>().excellerating == false && followTarget.gameObject.GetComponent<PlaneController>().decellerating == false)
+                {
+                   
+                    if (offsetPosition.z < -20f)
+                    {
+                        offsetPosition.z += 5f * Time.deltaTime;
+                        Debug.Log("decreasing distance due to speed decrease");
+
+                        
+                        if (offsetPosition.z >= -20f)
+                        {
+                            Debug.Log("I SHOULD CLMAP PLEASE!!!");
+                            offsetPosition.z = -20f;
+                        }
+                    }
+                    else
+                    {
+                        if (offsetPosition.z > -20f)
+                        {
+                            offsetPosition.z -= 5f * Time.deltaTime;
+                            Debug.Log("Increasing distance due to speed increase");
+
+                            if (offsetPosition.z <= -20f)
+                            {
+                                Debug.Log("I SHOULD CLMAP PLEASE!!!");
+                                offsetPosition.z = -20f;
+                            }
+                        }                       
+                    }
+
                 }
             }
             else

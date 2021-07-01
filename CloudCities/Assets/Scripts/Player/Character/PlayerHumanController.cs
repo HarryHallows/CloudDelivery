@@ -4,8 +4,7 @@ using UnityEngine;
 
 public class PlayerHumanController : MonoBehaviour
 {
-    private CharacterController controller;
-
+  
     [SerializeField] private Camera cam;
 
     [Header("Floats")]
@@ -17,7 +16,10 @@ public class PlayerHumanController : MonoBehaviour
     [SerializeField] private float moveSpeed, jumpHeight;
     [SerializeField] private float gravityAmount;
 
-    private Vector3 movement;
+    [SerializeField] private float smoothTime;
+    private float turnSmoothVelocity;
+
+    private Vector3 direction;
     private Vector3 playerVelocity;
 
     [SerializeField] private bool sprint, playerGrounded;
@@ -27,13 +29,11 @@ public class PlayerHumanController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-
         cam = Camera.main;
 
         cam.GetComponent<CameraFollow>().FollowTarget(gameObject.transform);
         cam.GetComponent<CameraFollow>().LookAtTarget(gameObject.transform);
 
-        controller = GetComponent<CharacterController>();
         anim = GetComponent<Animator>();    
     }
 
@@ -49,27 +49,31 @@ public class PlayerHumanController : MonoBehaviour
         horizontal = Input.GetAxis("Horizontal");
         vertical = Input.GetAxis("Vertical");
 
-        if (Input.GetKey(KeyCode.LeftShift))
+        if (Input.GetKeyDown(KeyCode.LeftShift))
         {
             if (sprint == false)
             {
                 sprint = true;
             }
-
-            if(sprint == true)
+        }
+        else
+        {
+            if (sprint == true)
             {
                 sprint = false;
             }
         }
 
-        movement = new Vector3(horizontal, 0, vertical);
+        direction = new Vector3(horizontal, 0, vertical).normalized;
 
-        if (horizontal != 0 || vertical != 0)
+        if (direction.magnitude >= 0.1f)
         {
+            Rotation();
             GroundedMovement();
         }
 
-        if (Input.GetButtonDown("Jump") && playerGrounded)
+
+        if (Input.GetButton("Jump") && playerGrounded)
         {
             Jump();
         }
@@ -77,7 +81,6 @@ public class PlayerHumanController : MonoBehaviour
         Animations();
 
         playerVelocity.y += gravityAmount * Time.deltaTime;
-        controller.Move(playerVelocity * Time.deltaTime);
     }
 
     private void Animations()
@@ -95,9 +98,17 @@ public class PlayerHumanController : MonoBehaviour
         }
     }
 
+    private void Rotation()
+    {
+        float targetAngle = Mathf.Atan2(direction.x, direction.z);
+        float angle = Mathf.SmoothDampAngle(transform.eulerAngles.y, targetAngle, ref turnSmoothVelocity, smoothTime);
+
+        transform.rotation = Quaternion.Euler(0f, angle, 0f);
+    }
+
     private void GroundedMovement()
     {
-        gameObject.transform.forward = movement;
+        gameObject.transform.forward = direction;
     }
 
     private void Jump()
