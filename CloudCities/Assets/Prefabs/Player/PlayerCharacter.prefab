@@ -848,6 +848,7 @@ GameObject:
   - component: {fileID: 6567819474617036120}
   - component: {fileID: 7005192360096905001}
   - component: {fileID: 3513761107164712664}
+  - component: {fileID: 498244}
   m_Layer: 0
   m_Name: PlayerCharacter
   m_TagString: Untagged
@@ -902,16 +903,44 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f5721b55f45346641b82a5c8d04fd167, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 0
-  thurstSpeed: 0
-  rotationSpeed: 0
-  turnSmoothVelocity: 0
-  vertical: 0
-  horizontal: 0
-  isPlane: 0
-  velocityCheck: {x: 0, y: 0, z: 0}
-  velcoity: {x: 0, y: 0, z: 0}
-  direction: {x: 0, y: 0, z: 0}
+  MoveSpeed: 2
+  SprintSpeed: 5.335
+  RotationSmoothTime: 0.12
+  SpeedChangeRate: 10
+  JumpHeight: 1.2
+  Gravity: -15
+  JumpTimeout: 0.5
+  FallTimeout: 0.15
+  Grounded: 1
+  GroundedOffset: -0.14
+  GroundedRadius: 0.28
+  GroundLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  CinemachineCameraTarget: {fileID: 0}
+  TopClamp: 70
+  BottomClamp: -30
+  CameraAngleOverride: 0
+  LockCameraPosition: 0
+  _animator: {fileID: 0}
+--- !u!143 &498244
+CharacterController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6567819474617463160}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Height: 1.03
+  m_Radius: 0.15
+  m_SlopeLimit: 45
+  m_StepOffset: 0.5
+  m_SkinWidth: 0.015
+  m_MinMoveDistance: 0.001
+  m_Center: {x: 0, y: 0.55, z: 0}
 --- !u!1 &6567819474617463162
 GameObject:
   m_ObjectHideFlags: 0
@@ -984,7 +1013,6 @@ GameObject:
   m_Component:
   - component: {fileID: 6567819474617036126}
   - component: {fileID: 6567819474620644474}
-  - component: {fileID: 6567819474617432025}
   m_Layer: 0
   m_Name: boy-sport_Rig
   m_TagString: Untagged
@@ -1083,20 +1111,6 @@ SkinnedMeshRenderer:
     m_Center: {x: 0.0018909276, y: -0.05073768, z: 0.050273538}
     m_Extent: {x: 0.9240165, y: 1.0173111, z: 0.29083893}
   m_DirtyAABB: 0
---- !u!136 &6567819474617432025
-CapsuleCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6567819474617463166}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  m_Radius: 0.13
-  m_Height: 1.1801053
-  m_Direction: 1
-  m_Center: {x: 0.0000038469443, y: 0.51297474, z: 0.034278788}
 --- !u!1 &8566820250110967175
 GameObject:
   m_ObjectHideFlags: 0
@@ -1115,7 +1129,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5588115943264139952
 Transform:
   m_ObjectHideFlags: 0
