@@ -75,7 +75,7 @@ public class PlayerController : MonoBehaviour
     private int _animIDFreeFall;
     private int _animIDMotionSpeed;
 
-    private Animator _animator;
+    public Animator _animator;
     private CharacterController _controller;
     private PlayerInputs _input;
     private GameObject _mainCamera;
@@ -187,8 +187,25 @@ public class PlayerController : MonoBehaviour
 
             // rotate to face input direction relative to camera position
             transform.rotation = Quaternion.Euler(0.0f, rotation, 0.0f);
+
+            _animator.SetBool("isWalking", true);
+            _animator.SetBool("isIdle", false);
+        }
+        else
+        {
+            _animator.SetBool("isIdle", true);
+            _animator.SetBool("isWalking", false);
         }
 
+        if (_input.sprint == true)
+        {
+            _animator.SetBool("isRunning", true);
+            _animator.SetBool("isWalking", false);
+        }
+        else
+        {
+            _animator.SetBool("isRunning", false);
+        }
 
         Vector3 targetDirection = Quaternion.Euler(0.0f, _targetRotation, 0.0f) * Vector3.forward;
 
@@ -246,6 +263,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+   
     private static float ClampAngle(float lfAngle, float lfMin, float lfMax)
     {
         if (lfAngle < -360f) lfAngle += 360f;
