@@ -20,14 +20,14 @@ public class LandingZone : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        BlinkAnim();
+        //BlinkAnim();
     }
 
     private void BlinkAnim()
     {
         mat.color = color;
 
-        Debug.Log(color);
+        //Debug.Log(color);
 
         if (color.a >= 1 && changeAlpha != true)
         {
