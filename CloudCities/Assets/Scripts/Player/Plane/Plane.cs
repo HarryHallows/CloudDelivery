@@ -47,6 +47,8 @@ public class Plane : MonoBehaviour
     [SerializeField] public RaycastHit landingHit, dockingHit;
     public LayerMask landingLayerMask, dockingLayerMask;
 
+    private Vector3 velocity = Vector3.zero;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -76,28 +78,69 @@ public class Plane : MonoBehaviour
         if (Physics.Raycast(transform.position, transform.TransformDirection(-Vector3.up), out landingHit, landingCheckRange, landingLayerMask))
         {
             Debug.Log("Hitting Runway");
+            Debug.DrawRay(transform.position, transform.TransformDirection(-Vector3.up) * landingHit.distance, Color.white);
             landed = true;
             docking = false;
         }
         else
         {
             Debug.Log("Not Hitting runway");
+
+            Debug.DrawRay(transform.position, transform.TransformDirection(-Vector3.up) * landingHit.distance, Color.magenta);
+
             landed = false;
-            takeOff = true;
+
+            if (docking != true)
+            {
+                takeOff = true;
+            }
+           
         }
 
-        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out dockingHit, dockingRange, dockingLayerMask))
+        if (landed == false)
         {
-            Debug.Log("hitting dock box");
-
-            if (dockingHit.collider.tag == "LandingZone")
+            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out dockingHit, dockingRange, dockingLayerMask) ||
+           Physics.Raycast(transform.position, transform.TransformDirection(Vector3.back), out dockingHit, dockingRange, dockingLayerMask) ||
+           Physics.Raycast(transform.position, transform.TransformDirection(Vector3.up), out dockingHit, dockingRange, dockingLayerMask) ||
+           Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out dockingHit, dockingRange, dockingLayerMask))
             {
-                Debug.Log("Docking Attempt");
-                landingTarget = dockingHit.collider.gameObject.transform.GetChild(0).gameObject;
-                docking = true;
+                Debug.Log("hitting dock box");
+                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * dockingHit.distance, Color.blue);
+                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.back) * dockingHit.distance, Color.blue);
+                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.up) * dockingHit.distance, Color.blue);
+                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down) * dockingHit.distance, Color.blue);
+
+                if (dockingHit.collider.tag == "LandingZone")
+                {
+                    Debug.Log("Docking Attempt");
+                    landingTarget = dockingHit.collider.gameObject.transform.GetChild(0).gameObject;
+                    docking = true;
+                }
+            }
+            else
+            {
+                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * dockingHit.distance, Color.red);
+                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.back) * dockingHit.distance, Color.red);
+                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.up) * dockingHit.distance, Color.red);
+                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down) * dockingHit.distance, Color.red);
+            }
+       
+        }
+
+        if (takeOff == true)
+        {
+            if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out dockingHit, dockingRange, dockingLayerMask))
+            {
+                Debug.Log("hitting dock box");
+
+                if (dockingHit.collider.tag == "LandingZone")
+                {
+                    Debug.Log("Docking Attempt");
+                    landingTarget = dockingHit.collider.gameObject.transform.GetChild(0).gameObject;
+                    docking = true;
+                }
             }
         }
-
     }
 
     private void Movement()
@@ -106,13 +149,50 @@ public class Plane : MonoBehaviour
         {
             if (fuel > 0)
             {
-                fuel -= Time.deltaTime / 2;
-
+               
                 // Adds a relative force from the current coordinate position of the plane/object
                 rb.AddRelativeForce(Vector3.forward * thrust * forceMultiplier, ForceMode.Force);
 
                 // Uses Torque to turn the plane/object
                 rb.AddRelativeTorque(new Vector3(turnTorque.x * pitch, turnTorque.y * yaw, turnTorque.z * roll) * forceMultiplier * Time.fixedDeltaTime, ForceMode.Force);
+
+                if (thrust <= 10 && (!docking || !landed))
+                {
+                    takeOff = false;
+                    rb.useGravity = true;
+                }
+
+                if (Input.GetKey(KeyCode.LeftShift))
+                {
+                    thrust += Time.deltaTime;
+
+                    float sprintTime = 5;
+
+                    sprintTime -= Time.deltaTime;
+
+                    if (sprintTime <= 0)
+                    {
+                        thrust += Time.deltaTime * 10;
+
+                        fuel -= Time.deltaTime / 4;
+
+                        
+                    }
+                }
+
+                if (thrust > 40)
+                { 
+                    fuel -= Time.deltaTime;
+                }
+                else
+                {
+                    fuel -= Time.deltaTime / 2;
+                }
+
+                if (Input.GetKey(KeyCode.LeftControl))
+                {
+                    thrust -= Time.deltaTime;
+                }
             }
             else
             {
@@ -140,13 +220,16 @@ public class Plane : MonoBehaviour
         {
             Debug.Log("Docking");
             takeOff = false;
-
+            rb.useGravity = false;
             thrust = 0;
 
-
             Quaternion dockingRotation = Quaternion.identity;
-            transform.rotation = Quaternion.Slerp(transform.rotation, dockingRotation, landingTime);
-            transform.position = Vector3.Lerp(transform.position, landingTarget.transform.position, landingTime);
+            transform.rotation = Quaternion.Slerp(transform.rotation, dockingRotation, 0.5f * Time.deltaTime);
+
+            Vector3 targetPosition = landingTarget.transform.TransformPoint(new Vector3(0, 0f, 0));
+
+            // Smoothly move the camera towards that target position
+            transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, landingTime);
 
         }
        
