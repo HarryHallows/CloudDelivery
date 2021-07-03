@@ -52,6 +52,9 @@ public class PlayerController : MonoBehaviour
     [Tooltip("For locking the camera position on all axis")]
     public bool LockCameraPosition = false;
 
+    [Header("Interactions")]
+    [SerializeField] private float interactRange;
+
     // cinemachine
     private float _cinemachineTargetYaw;
     private float _cinemachineTargetPitch;
@@ -281,6 +284,9 @@ public class PlayerController : MonoBehaviour
 
         // when selected, draw a gizmo in the position of, and matching radius of, the grounded collider
         Gizmos.DrawSphere(new Vector3(transform.position.x, transform.position.y - GroundedOffset, transform.position.z), GroundedRadius);
+
+        Gizmos.color = Color.white;
+        Gizmos.DrawWireSphere(new Vector3(transform.position.x, transform.position.y + .5f, transform.position.z), interactRange);
     }
 }
 

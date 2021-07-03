@@ -350,7 +350,12 @@ public class Plane : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        Debug.DrawRay(transform.position, transform.TransformDirection(-Vector3.up) * landingHit.distance, Color.green);
-        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * dockingHit.distance, Color.blue);
+
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, dockingRange);
+
+
+        Gizmos.color = Color.blue;
+        Gizmos.DrawLine(transform.position, landingTarget.transform.position * landingCheckRange);
     }
 }
