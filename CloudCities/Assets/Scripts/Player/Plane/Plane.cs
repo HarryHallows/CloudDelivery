@@ -1,12 +1,14 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 [RequireComponent(typeof(Rigidbody))]
 public class Plane : MonoBehaviour
 {
     [Header("Components")]
     [SerializeField] private Rigidbody rb;
+    [SerializeField] private CinemachineFreeLook cam;
 
     [Header("Health")]
     public int planeHealth;
@@ -14,8 +16,10 @@ public class Plane : MonoBehaviour
     [Header("Physics")]
     [Tooltip("Force to push plane forwards")] public float thrust = 100f;
     [Tooltip("Pitch, Yaw, Roll")] public Vector3 turnTorque = new Vector3(90f, 25f, 45f);
-    [Tooltip("Multiplier for the smount the forces (pitch, yaw, roll) move")] public float forceMultiplier = 100f, rollMultiplier;
+    [Tooltip("Multiplier for the smount the forces (pitch, yaw, roll) move")] public float forceMultiplier = 100f, rollMultiplier, pitchMultiplier;
 
+    [Tooltip("Decides how long you can be flying before landing")] public float fuel;
+    [SerializeField] private float startFuel = 100f;
 
     [Header("Inputs")] 
     [SerializeField] [Range(-1f, 1f)] private float pitch = 0f;
@@ -34,14 +38,22 @@ public class Plane : MonoBehaviour
     //Overrides to check if the player using input to turn off assisted piloting to straighten plane
     private bool rollOverride, pitchOverride;
 
-
     [Header("FlightConditions")]
-    private bool takeOff, docking, landed;
+    [SerializeField] private bool takeOff, docking, landed;
+
+    [Header("Landing")]
+    [SerializeField] private float landingTime, landingCheckRange, dockingRange;
+    [SerializeField] private GameObject landingTarget;
+    [SerializeField] public RaycastHit landingHit, dockingHit;
+    public LayerMask landingLayerMask, dockingLayerMask;
 
     // Start is called before the first frame update
     void Start()
     {
+        //cam = Camera.main.GetComponent<CinemachineFreeLook>();
         rb = GetComponent<Rigidbody>();
+
+        fuel = startFuel;
     }
 
     // Update is called once per frame
@@ -51,30 +63,103 @@ public class Plane : MonoBehaviour
         float inputPitch = Input.GetAxis("Vertical");
 
         Inputs(-inputRoll, inputPitch);
+        RayChecks();
     }
 
     private void FixedUpdate()
     {
-        // Adds a relative force from the current coordinate position of the plane/object
-        rb.AddRelativeForce(Vector3.forward * thrust * forceMultiplier, ForceMode.Force);
+        Movement();
+    }
 
-        // Uses Torque to turn the plane/object
-        rb.AddRelativeTorque(new Vector3(turnTorque.x * pitch, turnTorque.y * yaw, turnTorque.z * roll) * forceMultiplier * Time.fixedDeltaTime, ForceMode.Force);
+    private void RayChecks()
+    {
+        if (Physics.Raycast(transform.position, transform.TransformDirection(-Vector3.up), out landingHit, landingCheckRange, landingLayerMask))
+        {
+            Debug.Log("Hitting Runway");
+            landed = true;
+            docking = false;
+        }
+        else
+        {
+            Debug.Log("Not Hitting runway");
+            landed = false;
+            takeOff = true;
+        }
+
+        if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out dockingHit, dockingRange, dockingLayerMask))
+        {
+            Debug.Log("hitting dock box");
+
+            if (dockingHit.collider.tag == "LandingZone")
+            {
+                Debug.Log("Docking Attempt");
+                landingTarget = dockingHit.collider.gameObject.transform.GetChild(0).gameObject;
+                docking = true;
+            }
+        }
+
+    }
+
+    private void Movement()
+    {
+        if (takeOff == true)
+        {
+            if (fuel > 0)
+            {
+                fuel -= Time.deltaTime / 2;
+
+                // Adds a relative force from the current coordinate position of the plane/object
+                rb.AddRelativeForce(Vector3.forward * thrust * forceMultiplier, ForceMode.Force);
+
+                // Uses Torque to turn the plane/object
+                rb.AddRelativeTorque(new Vector3(turnTorque.x * pitch, turnTorque.y * yaw, turnTorque.z * roll) * forceMultiplier * Time.fixedDeltaTime, ForceMode.Force);
+            }
+            else
+            {
+                rb.useGravity = true;
+                cam.GetComponent<CinemachineFreeLook>().m_Follow = null;
+            }
+        }
+        else
+        {
+            if (landed == true)
+            {
+                fuel = startFuel;
+
+                if (Input.GetKey(KeyCode.LeftShift))
+                {
+                    thrust += Time.deltaTime * 5;
+
+                    // Adds a relative force from the current coordinate position of the plane/object
+                    rb.AddRelativeForce(Vector3.forward * thrust * forceMultiplier, ForceMode.Force);
+                }   
+            }
+        }
+
+        if (docking == true)
+        {
+            Debug.Log("Docking");
+            takeOff = false;
+
+            thrust = 0;
+
+
+            Quaternion dockingRotation = Quaternion.identity;
+            transform.rotation = Quaternion.Slerp(transform.rotation, dockingRotation, landingTime);
+            transform.position = Vector3.Lerp(transform.position, landingTarget.transform.position, landingTime);
+
+        }
+       
     }
 
     private void Inputs(float _roll, float _pitch)
     {
-        //Debug.Log($"roll input value : {roll} + pitch input value is : {pitch}");
-        //Debug.Log((Mathf.Abs(_roll) > .25f) + (": roll " + true));
-        //Debug.Log((Mathf.Abs(_pitch) > .25f) + (": pitch " + true));
-
         rollOverride = false;
         pitchOverride = false;
 
         if (Mathf.Abs(_roll) > .25f)
         {
             roll = _roll * rollMultiplier;
-            //Debug.Log("roll " + true);
             rollOverride = true;
         }
         else
@@ -84,7 +169,6 @@ public class Plane : MonoBehaviour
 
         if (Mathf.Abs(_pitch) > .25f)
         {
-            //Debug.Log("pitch " + true);
             pitch = _pitch;
 
             pitchOverride = true;
@@ -97,17 +181,22 @@ public class Plane : MonoBehaviour
 
         yaw = 0f;
 
+
         if (Input.GetButton("Fire1"))
         {
             Debug.Log("Pew pew pew");
+
         }
 
         if (Input.GetButton("Fire2"))
         {
-            Debug.Log("CameraRotate");
+            AutoPilot(new Vector3(transform.position.x, transform.position.y, transform.position.z), out yaw, out pitch, out roll);
+        }
+        else
+        {
+            cam.GetComponent<CinemachineFreeLook>().m_XAxis.m_MaxSpeed = 0f;
         }
 
-        AutoPilot(new Vector3(transform.position.x, transform.position.y, transform.position.z), out yaw, out pitch, out roll);
     }
 
     private void AutoPilot(Vector3 flyingTarget, out float yaw, out float pitch, out float roll)
@@ -115,14 +204,18 @@ public class Plane : MonoBehaviour
         //Turn on autopilot and change camera from look around to look at mouse direction (to move the players perspective so they can see enemies)
         if (Input.GetButton("Fire2"))
         {
+            Debug.Log("Pilot Lock");
+
             yaw = 0;
             pitch = 0;
             roll = 0;
 
             //Call Camera function to change viewing style to rotate around target == plane by 180degrees roughly
-            CameraRotate(gameObject, )
+            cam.GetComponent<CinemachineFreeLook>().m_XAxis.m_MaxSpeed = 200f;
+
             return;
         }
+        
 
         var localFlyTarget = transform.InverseTransformPoint(flyingTarget).normalized * sensitivity;
         var angleOffTarget = Vector3.Angle(transform.forward, flyingTarget - transform.position);
@@ -172,17 +265,9 @@ public class Plane : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter(Collider trigger)
+    private void OnDrawGizmos()
     {
-        if (trigger.gameObject.CompareTag("LandingZone") && takeOff == true)
-        {
-            if (Input.GetButtonDown("Interact"))
-            {
-                Debug.Log("Docking");
-
-                docking = true;
-            }
-        }
+        Debug.DrawRay(transform.position, transform.TransformDirection(-Vector3.up) * landingHit.distance, Color.green);
+        Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * dockingHit.distance, Color.blue);
     }
-
 }

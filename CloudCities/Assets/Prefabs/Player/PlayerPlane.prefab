@@ -64,14 +64,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 2082594577}
+  cam: {fileID: 0}
+  planeHealth: 0
   thrust: 5000
   turnTorque: {x: 90, y: 25, z: 45}
-  forceMultipleir: 5
+  forceMultiplier: 100
+  rollMultiplier: 0
+  pitchMultiplier: 0
+  fuel: 0
+  startFuel: 100
   pitch: 0
   yaw: 0
   roll: 0
   sensitivity: 2.5
   aggressiveTurnAngle: 10
+  takeOff: 0
+  docking: 0
+  landed: 0
+  landingTime: 0
+  landingCheckRange: 0
+  dockingRange: 0
+  landingTarget: {fileID: 0}
+  landingLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
+  dockingLayerMask:
+    serializedVersion: 2
+    m_Bits: 0
 --- !u!1 &3093551109783785593
 GameObject:
   m_ObjectHideFlags: 0
@@ -348,26 +367,32 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 1
---- !u!114 &129705952
-MonoBehaviour:
+--- !u!65 &899659756211644867
+BoxCollider:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7833718756912360354}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4eb6e929c0ed72446b0d4ba62987b723, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  planeControl: {fileID: 0}
-  xRot: 0
-  yRot: 0
-  rotationSpeed: 0
-  startRotation: {x: 0, y: 0, z: 0, w: 0}
-  targetRotationX: {x: 0, y: 0, z: 0, w: 0}
-  targetRotationY: {x: 0, y: 0, z: 0, w: 0}
-  cam: {fileID: 0}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 3.65, y: 0.72, z: 0.63}
+  m_Center: {x: 0.57, y: 0.69, z: 0}
+--- !u!65 &9012123773219231060
+BoxCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7833718756912360354}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 0
+  m_Enabled: 1
+  serializedVersion: 2
+  m_Size: {x: 0.5, y: 0.24, z: 5.1244}
+  m_Center: {x: 0, y: 0.69, z: 0}
 --- !u!1001 &8155773344376342960
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -417,7 +442,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1644383126447061160, guid: fa28e0cc64b3f4345a9d2215c5bfec80, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.15
       objectReference: {fileID: 0}
     - target: {fileID: 1644383126447061160, guid: fa28e0cc64b3f4345a9d2215c5bfec80, type: 3}
       propertyPath: m_LocalPosition.z
@@ -459,7 +484,12 @@ PrefabInstance:
       propertyPath: m_Convex
       value: 1
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    - target: {fileID: 2132970168135295725, guid: fa28e0cc64b3f4345a9d2215c5bfec80, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 2132970168135295725, guid: fa28e0cc64b3f4345a9d2215c5bfec80, type: 3}
   m_SourcePrefab: {fileID: 100100000, guid: fa28e0cc64b3f4345a9d2215c5bfec80, type: 3}
 --- !u!1 &7833718756912360354 stripped
 GameObject:

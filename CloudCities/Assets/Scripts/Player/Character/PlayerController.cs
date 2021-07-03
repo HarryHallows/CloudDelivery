@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Cinemachine;
 
 public class PlayerController : MonoBehaviour
 {
@@ -8,6 +9,7 @@ public class PlayerController : MonoBehaviour
     [Header("Component Calls")]
     private Animator anim;
     private Rigidbody rb;
+    private CinemachineFreeLook cam;
 
     [Header("Floats")]
     //Speeds
@@ -25,6 +27,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] Vector3 velcoity;
 
     [SerializeField] Vector3 direction;
+
+
+    private void OnEnable()
+    {
+        cam = Camera.main.GetComponent<CinemachineFreeLook>();
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -91,12 +99,15 @@ public class PlayerController : MonoBehaviour
 
             }
             transform.Rotate((transform.right * vertical) * rotationSpeed * Time.fixedDeltaTime);
-            transform.Rotate((transform.forward * horizontal) * rotationSpeed * Time.fixedDeltaTime);
+        
         }
         else
         {
             transform.Rotate((transform.up * horizontal) * rotationSpeed * Time.fixedDeltaTime);
 
         }*/
+
+        transform.Rotate((transform.up * horizontal) * rotationSpeed * Time.fixedDeltaTime);
+
     }
 }
