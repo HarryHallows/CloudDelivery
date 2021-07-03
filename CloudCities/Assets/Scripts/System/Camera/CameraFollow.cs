@@ -20,6 +20,7 @@ public class CameraFollow : MonoBehaviour
 
     [SerializeField]
     private float smoothSpeed;
+    [SerializeField] private float directionSpeed;
 
     private void LateUpdate()
     {
@@ -33,69 +34,7 @@ public class CameraFollow : MonoBehaviour
 
         if (followTarget.gameObject.name == "PlayerPlane")
         {
-            if (followTarget.gameObject.GetComponent<PlaneController>().takeOff == true)
-            {
-                if (followTarget.gameObject.GetComponent<PlaneController>().decellerating == true)
-                {
-                    offsetPosition.z += 5f * Time.deltaTime;
-
-                    Debug.Log("decreasing distance due to speed decrease");
-
-                    if (offsetPosition.z >= -5f)
-                    {
-                        offsetPosition.z = -5f;
-                    }
-                }
-
-                if (followTarget.gameObject.GetComponent<PlaneController>().excellerating == true)
-                {
-                    offsetPosition.z -= 5f * Time.deltaTime;
-
-                    Debug.Log("Increasing distance due to speed increase");
-
-                    if (offsetPosition.z <= -30f)
-                    {
-                       
-                        offsetPosition.z = -30f;
-                    }
-                }
-
-                if (followTarget.gameObject.GetComponent<PlaneController>().excellerating == false && followTarget.gameObject.GetComponent<PlaneController>().decellerating == false)
-                {
-                   
-                    if (offsetPosition.z < -20f)
-                    {
-                        offsetPosition.z += 5f * Time.deltaTime;
-                        Debug.Log("decreasing distance due to speed decrease");
-
-                        
-                        if (offsetPosition.z >= -20f)
-                        {
-                            Debug.Log("I SHOULD CLMAP PLEASE!!!");
-                            offsetPosition.z = -20f;
-                        }
-                    }
-                    else
-                    {
-                        if (offsetPosition.z > -20f)
-                        {
-                            offsetPosition.z -= 5f * Time.deltaTime;
-                            Debug.Log("Increasing distance due to speed increase");
-
-                            if (offsetPosition.z <= -20f)
-                            {
-                                Debug.Log("I SHOULD CLMAP PLEASE!!!");
-                                offsetPosition.z = -20f;
-                            }
-                        }                       
-                    }
-
-                }
-            }
-            else
-            {
-                offsetPosition.z = -10f;
-            }
+        
             
         }
 
@@ -128,13 +67,18 @@ public class CameraFollow : MonoBehaviour
         }
     }
 
-    public void FollowTarget(Transform target)
+    public void FollowTarget(Transform _target)
     {
-        followTarget = target;
+        followTarget = _target;
     }
 
-    public void LookAtTarget(Transform target)
+    public void LookAtTarget(Transform _target)
     {
-        lookAtTarget = target;
+        lookAtTarget = _target;
+    }
+
+    public void CameraRotate(Transform _target, float _direction)
+    {
+        transform.RotateAround(_target.transform.position, Vector3.up, (_direction * directionSpeed) * Time.deltaTime);
     }
 }
