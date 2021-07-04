@@ -107,6 +107,8 @@ GameObject:
   - component: {fileID: 1770629664356245087}
   - component: {fileID: 3809994744052769175}
   - component: {fileID: 3559280773104480032}
+  - component: {fileID: 7548342976213190453}
+  - component: {fileID: -464585220301505452}
   m_Layer: 0
   m_Name: PirateShip
   m_TagString: Untagged
@@ -174,6 +176,36 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
+--- !u!114 &7548342976213190453
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1770629664356513217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 93ac8e0d67a4b9349b00c1a67e3d19a4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  currentWaypoint: {fileID: 0}
+--- !u!114 &-464585220301505452
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1770629664356513217}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4c9da17c53207b344994bd90de2ae21d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  destination: {x: 0, y: 0, z: 0}
+  rotationSpeed: 60
+  movementSpeed: 5
+  stopDistance: 1
+  reachedDestination: 0
 --- !u!1 &1909128163930764905
 GameObject:
   m_ObjectHideFlags: 0

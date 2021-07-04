@@ -23,6 +23,12 @@ public class PirateController : MonoBehaviour
 
     public bool closeCombat;
 
+    public Transform shipGFX;
+    public float rotSpeed = 5;
+
+
+    
+
 
     void Start()
     {
@@ -38,6 +44,8 @@ public class PirateController : MonoBehaviour
         if(distance <= lookRadius)
         {
             //long combat
+            gameObject.GetComponent<CharacterNavigationController>().enabled = false;
+            gameObject.GetComponent<WaypointNavigator>().enabled = false;
 
             fireRateLeft -= Time.deltaTime;
             if(fireRateLeft <= 00 && !closeCombat)
@@ -48,8 +56,8 @@ public class PirateController : MonoBehaviour
                 Debug.Log("Long Combat");
             }
 
-            
 
+            shipGFX.rotation = Quaternion.Lerp(shipGFX.rotation, Quaternion.Euler(0, 90, 0) ,Time.deltaTime * rotSpeed);
             transform.LookAt(target);
             
 
@@ -74,6 +82,11 @@ public class PirateController : MonoBehaviour
                 closeCombat = false;
             }
         }
+
+        if(distance >= lookRadius)
+        {
+            Patrol();
+        }
     }
 
     private void OnDrawGizmosSelected()
@@ -92,5 +105,12 @@ public class PirateController : MonoBehaviour
     {
         GameObject bullet = ObjectPool.SharedInstance.SpawnFromPool("Bullets", cannon[Random.Range(0,1)].transform.position);
         bullet.SetActive(true);
+    }
+
+    void Patrol()
+    {
+        shipGFX.rotation = shipGFX.parent.rotation;
+        gameObject.GetComponent<CharacterNavigationController>().enabled = true;
+        gameObject.GetComponent<WaypointNavigator>().enabled = true;
     }
 }
