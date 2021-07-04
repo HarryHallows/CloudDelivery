@@ -52,8 +52,22 @@ public class PlayerController : MonoBehaviour
     [Tooltip("For locking the camera position on all axis")]
     public bool LockCameraPosition = false;
 
+    [Tooltip("Activates Plane Camera")] [SerializeField] CinemachineFreeLook cam;
+    [Tooltip("Deactivates Player Camera")] [SerializeField] CinemachineFreeLook planeCam;
+
     [Header("Interactions")]
+
+    [SerializeField] private bool interacting;
+    
     [SerializeField] private float interactRange;
+
+    private RaycastHit interactHit;
+
+    [SerializeField] private LayerMask interactLayer;
+
+    [Header("EnteringPlane")]
+    [SerializeField] private GameObject plane;
+    [SerializeField] private Plane planeControl;
 
     // cinemachine
     private float _cinemachineTargetYaw;
@@ -94,6 +108,33 @@ public class PlayerController : MonoBehaviour
         {
             _mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
         }
+
+        if (cam == null)
+        {
+            cam = _mainCamera.transform.GetChild(0).GetComponent<CinemachineFreeLook>();
+        }
+
+        if (planeCam == null)
+        {
+            planeCam = _mainCamera.transform.GetChild(1).GetComponent<CinemachineFreeLook>();
+        }
+
+        if (plane == null)
+        {
+            plane = GameObject.Find("PlayerPlane");
+        }
+
+        if (planeControl == null)
+        {
+            planeControl = plane.GetComponent<Plane>();
+        }
+    }
+
+    private void OnEnable()
+    {
+        cam.gameObject.SetActive(true);
+        planeCam.gameObject.SetActive(false);
+        planeControl.enabled = false;
     }
 
     private void Start()
@@ -105,6 +146,13 @@ public class PlayerController : MonoBehaviour
         // reset our timeouts on start
         _jumpTimeoutDelta = JumpTimeout;
         _fallTimeoutDelta = FallTimeout;
+
+        plane = GameObject.Find("PlayerPlane");
+        planeControl = FindObjectOfType<Plane>();
+
+        cam.gameObject.SetActive(true);
+        planeCam.gameObject.SetActive(false);
+        planeControl.enabled = false;
     }
 
     private void Update()
@@ -114,11 +162,51 @@ public class PlayerController : MonoBehaviour
         JumpAndGravity();
         GroundedCheck();
         Move();
+        Interact();
     }
 
     private void LateUpdate()
     {
         CameraRotation();
+    }
+
+    private void Interact()
+    {
+        interacting = Physics.CheckSphere(transform.position, interactRange, interactLayer);
+
+        if (interacting == true)
+        {
+            Debug.Log("Interacting!");
+
+            if (Physics.SphereCast(transform.position, _controller.height / 2, transform.forward, out interactHit, interactRange, interactLayer))
+            {
+                Debug.Log(interactHit.collider.name);
+
+                if (Input.GetKeyDown(KeyCode.E))
+                {
+                    if (interactHit.collider.name == "LightPlane")
+                    {
+                        BoardPlane();
+                    }
+
+                    if (interactHit.collider.name == "balloon")
+                    {
+                        interactHit.collider.gameObject.GetComponent<TransportLift>().Lift(gameObject.transform);
+                        
+                    }
+                }
+              
+            }
+           
+           
+        }
+    }
+
+    private void BoardPlane()
+    {
+        cam.gameObject.SetActive(false);
+        planeCam.gameObject.SetActive(true);
+        planeControl.enabled = true;
     }
 
     private void GroundedCheck()
