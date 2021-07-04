@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 815475572134831374}
   - component: {fileID: 2082594577}
   - component: {fileID: 815475570756057914}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: PlayerPlane
   m_TagString: Player
   m_Icon: {fileID: 0}
@@ -58,20 +58,21 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 815475572134831375}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: eed38693467ddcd48bab502f1cbec6b8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 2082594577}
   cam: {fileID: 0}
+  characterCam: {fileID: 0}
   planeHealth: 0
-  thrust: 5000
-  turnTorque: {x: 90, y: 25, z: 45}
-  forceMultiplier: 100
-  rollMultiplier: 0
+  thrust: 0
+  turnTorque: {x: 130, y: 25, z: 45}
+  forceMultiplier: 150
+  rollMultiplier: 10
   pitchMultiplier: 0
-  fuel: 0
+  fuel: 100
   startFuel: 100
   pitch: 0
   yaw: 0
@@ -79,18 +80,22 @@ MonoBehaviour:
   sensitivity: 2.5
   aggressiveTurnAngle: 10
   takeOff: 0
-  docking: 0
+  docking: 1
+  dockingCollide: 0
   landed: 0
-  landingTime: 0
-  landingCheckRange: 0
-  dockingRange: 0
+  landingTime: 5.3
+  landingCheckRange: 0.45
+  dockingRange: 2.38
+  dockingRadius: 0
   landingTarget: {fileID: 0}
   landingLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   dockingLayerMask:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 128
+  playerCharacter: {fileID: 0}
+  exitPlanePosition: {x: 5, y: 0, z: 0}
 --- !u!1 &3093551109783785593
 GameObject:
   m_ObjectHideFlags: 0
@@ -101,7 +106,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1544116133161703833}
   - component: {fileID: 8628668874992961654}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: wind trail (1)
   m_TagString: Untagged
   m_Icon: {fileID: 7866945982896999795, guid: 0000000000000000d000000000000000, type: 0}
@@ -239,7 +244,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1311196466741773972}
   - component: {fileID: 3660935415780096928}
-  m_Layer: 0
+  m_Layer: 9
   m_Name: wind trail
   m_TagString: Untagged
   m_Icon: {fileID: 7866945982896999795, guid: 0000000000000000d000000000000000, type: 0}
@@ -432,6 +437,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.x
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 874823217782109113, guid: fa28e0cc64b3f4345a9d2215c5bfec80, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 1644383126447061160, guid: fa28e0cc64b3f4345a9d2215c5bfec80, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -476,9 +485,17 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1647013941135773277, guid: fa28e0cc64b3f4345a9d2215c5bfec80, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
     - target: {fileID: 2132970168135295506, guid: fa28e0cc64b3f4345a9d2215c5bfec80, type: 3}
       propertyPath: m_Name
       value: LightPlane
+      objectReference: {fileID: 0}
+    - target: {fileID: 2132970168135295506, guid: fa28e0cc64b3f4345a9d2215c5bfec80, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     - target: {fileID: 2132970168135295725, guid: fa28e0cc64b3f4345a9d2215c5bfec80, type: 3}
       propertyPath: m_Convex
@@ -487,6 +504,14 @@ PrefabInstance:
     - target: {fileID: 2132970168135295725, guid: fa28e0cc64b3f4345a9d2215c5bfec80, type: 3}
       propertyPath: m_Enabled
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3124338867421758409, guid: fa28e0cc64b3f4345a9d2215c5bfec80, type: 3}
+      propertyPath: m_Layer
+      value: 9
+      objectReference: {fileID: 0}
+    - target: {fileID: 6276532506113015953, guid: fa28e0cc64b3f4345a9d2215c5bfec80, type: 3}
+      propertyPath: m_Layer
+      value: 9
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 2132970168135295725, guid: fa28e0cc64b3f4345a9d2215c5bfec80, type: 3}

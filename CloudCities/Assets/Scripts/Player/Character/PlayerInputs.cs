@@ -11,6 +11,8 @@ public class PlayerInputs : MonoBehaviour
     [Header("Character Input Values")]
     public Vector2 move;
     public Vector2 look;
+
+    public bool interact;
     public bool jump;
     public bool sprint;
 

@@ -1000,7 +1000,6 @@ GameObject:
   - component: {fileID: 7345633944428799452}
   - component: {fileID: 7345633944428799451}
   - component: {fileID: 7345633944428799454}
-  - component: {fileID: 7345633944428799455}
   - component: {fileID: 7345633944428799424}
   m_Layer: 0
   m_Name: Main Camera
@@ -1108,30 +1107,6 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
---- !u!114 &7345633944428799455
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7345633944428799450}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 82ae250c778ecd14b9babf2849084d26, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  followTarget: {fileID: 0}
-  lookAtTarget: {fileID: 0}
-  offsetPosition: {x: 0, y: 3, z: -20}
-  offsetPositionSpace: 1
-  lookAt: 1
-  rotateAround: 0
-  cameraFollow: 1
-  smoothSpeed: 2
-  directionSpeed: 10
-  direction: 0
-  camYaw: 0
-  camPitch: 0
 --- !u!114 &7345633944428799424
 MonoBehaviour:
   m_ObjectHideFlags: 0
