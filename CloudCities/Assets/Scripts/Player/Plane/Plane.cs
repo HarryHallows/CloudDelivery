@@ -120,7 +120,7 @@ public class Plane : MonoBehaviour
             roll = 0;
 
             //Call Camera function to change viewing style to rotate around target == plane by 180degrees roughly
-            CameraRotate(gameObject, )
+            //CameraRotate(gameObject);
             return;
         }
 

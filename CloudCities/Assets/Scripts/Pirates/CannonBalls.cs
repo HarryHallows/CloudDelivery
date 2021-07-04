@@ -9,6 +9,9 @@ public class CannonBalls : MonoBehaviour
     private Transform target;
     public Transform hitArea;
 
+
+    public int damage;
+
     Vector3 dir;
 
     // Start is called before the first frame update
@@ -17,6 +20,9 @@ public class CannonBalls : MonoBehaviour
         target = GameObject.Find("Player").transform;
         hitArea = target;
         dir = hitArea.position - transform.position;
+
+
+        damage = Random.Range(5, 10);
     }
 
     // Update is called once per frame
@@ -32,14 +38,22 @@ public class CannonBalls : MonoBehaviour
 
         if((hitArea.position - transform.position).magnitude <= distanceThisFrame)
         {
-            BallHit();
+            StartCoroutine(BallHit());
         }
 
         transform.Translate(dir.normalized * distanceThisFrame, Space.World);
+
+        if (Vector3.Distance(transform.position, target.position) > 30)
+        {
+            gameObject.SetActive(false);
+        }
     }
 
-    void BallHit()
+    IEnumerator BallHit()
     {
+        GameObject smoke = ObjectPool.SharedInstance.SpawnFromPool("Smoke", transform.position);
+        smoke.SetActive(true);
+        yield return new WaitForSeconds(1);
         gameObject.SetActive(false);
         //do damage
     }
