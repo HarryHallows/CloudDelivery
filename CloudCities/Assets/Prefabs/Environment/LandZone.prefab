@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1103845368072448011}
   - component: {fileID: 5642579115987473298}
   - component: {fileID: 6659064737359392240}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: LandZone
   m_TagString: LandingZone
   m_Icon: {fileID: 0}
@@ -31,7 +31,8 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 18.620003, y: 21.619999, z: 16.49}
   m_LocalScale: {x: 11.15, y: 8, z: 35}
-  m_Children: []
+  m_Children:
+  - {fileID: 4846771327531496909}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -130,3 +131,34 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mat: {fileID: 0}
   color: {r: 0, g: 0, b: 0, a: 0}
+  changeAlpha: 0
+--- !u!1 &3595152643479762753
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4846771327531496909}
+  m_Layer: 0
+  m_Name: LandingPosition
+  m_TagString: Untagged
+  m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4846771327531496909
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3595152643479762753}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.097, y: -0.503, z: 0.4149}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_Children: []
+  m_Father: {fileID: 689258206699226576}
+  m_RootOrder: 0
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
