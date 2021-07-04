@@ -48,13 +48,13 @@ MonoBehaviour:
     prefab: {fileID: 0}
     size: 0
   - tag: Cannon Balls
-    prefab: {fileID: 0}
+    prefab: {fileID: 1966937658380547755, guid: f7817b84f0b4b37488fcf1ea677d2461, type: 3}
     size: 50
   - tag: Bullets
-    prefab: {fileID: 0}
+    prefab: {fileID: 4064788017011320540, guid: 50605b4b0bc8e6f4d86ffb17d3f739bf, type: 3}
     size: 0
   - tag: Pirate Ships
-    prefab: {fileID: 0}
+    prefab: {fileID: 1770629664356513217, guid: 855fca4376484504abacc6c177a6c89d, type: 3}
     size: 0
   - tag: NPCs
     prefab: {fileID: 0}

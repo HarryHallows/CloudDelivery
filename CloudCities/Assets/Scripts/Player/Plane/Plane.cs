@@ -295,7 +295,6 @@ public class Plane : MonoBehaviour
 
             //Call Camera function to change viewing style to rotate around target == plane by 180degrees roughly
             cam.GetComponent<CinemachineFreeLook>().m_XAxis.m_MaxSpeed = 200f;
-
             return;
         }
         

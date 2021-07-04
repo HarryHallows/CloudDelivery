@@ -152,9 +152,12 @@ MonoBehaviour:
   thrust: 0
   target: {fileID: 0}
   hitArea: {fileID: 0}
-  cannon: {fileID: 0}
+  cannon:
+  - {fileID: 8930413336483324474}
+  - {fileID: 2201624546212200558}
   fireRate: 0.5
   bulletRate: 0.5
+  closeCombat: 0
 --- !u!54 &3559280773104480032
 Rigidbody:
   m_ObjectHideFlags: 0

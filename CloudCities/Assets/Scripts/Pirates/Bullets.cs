@@ -9,6 +9,8 @@ public class Bullets : MonoBehaviour
     private Transform target;
     public Transform hitArea;
 
+    public int damage;
+
     Vector3 dir;
 
     // Start is called before the first frame update
@@ -17,6 +19,8 @@ public class Bullets : MonoBehaviour
         target = GameObject.Find("Player").transform;
         hitArea = target;
         dir = hitArea.position - transform.position;
+
+        damage = Random.Range(5, 10);
     }
 
     // Update is called once per frame
@@ -30,16 +34,24 @@ public class Bullets : MonoBehaviour
 
         float distanceThisFrame = moveSpeed * Time.deltaTime;
 
-        if ((hitArea.position - transform.position).magnitude <= distanceThisFrame)
+        if ((hitArea.position - transform.position).magnitude <= distanceThisFrame )
         {
-            BullHit();
+            StartCoroutine(BullHit());
         }
 
         transform.Translate(dir.normalized * distanceThisFrame, Space.World);
+
+        if(Vector3.Distance(transform.position, target.position) > 30)
+        {
+            gameObject.SetActive(false);
+        }
     }
 
-    void BullHit()
+    IEnumerator BullHit()
     {
+        GameObject smoke = ObjectPool.SharedInstance.SpawnFromPool("Smoke", transform.position);
+        smoke.SetActive(true);
+        yield return new WaitForSeconds(1);
         gameObject.SetActive(false);
         //do damage
     }
