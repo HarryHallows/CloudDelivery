@@ -37,8 +37,14 @@ public class PlayerController : MonoBehaviour
     public float GroundedOffset = -0.14f;
     [Tooltip("The radius of the grounded check. Should match the radius of the CharacterController")]
     public float GroundedRadius = 0.28f;
+    [Tooltip("Checks for decents longer than a jump")]
+    public float jumpTimer;
+    [SerializeField] private float startJumpTimer;
+
     [Tooltip("What layers the character uses as ground")]
     public LayerMask GroundLayers;
+    
+
 
     [Header("Cinemachine")]
     [Tooltip("The follow target set in the Cinemachine Virtual Camera that the camera will follow")]
@@ -153,6 +159,8 @@ public class PlayerController : MonoBehaviour
         cam.gameObject.SetActive(true);
         planeCam.gameObject.SetActive(false);
         planeControl.enabled = false;
+
+        jumpTimer = startJumpTimer;
     }
 
     private void Update()
@@ -331,9 +339,20 @@ public class PlayerController : MonoBehaviour
             {
                 _jumpTimeoutDelta -= Time.deltaTime;
             }
+
+            jumpTimer = startJumpTimer;
         }
         else
         {
+            jumpTimer -= Time.deltaTime;
+
+            if (jumpTimer <= 0)
+            {
+                //Player dies
+
+                Debug.Log("You broke your dumbass neck");
+            }
+
             // reset the jump timeout timer
             _jumpTimeoutDelta = JumpTimeout;
 

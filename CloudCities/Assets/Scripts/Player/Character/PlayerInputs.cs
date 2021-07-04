@@ -28,10 +28,20 @@ public class PlayerInputs : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Inputs();
+    }
+
+    private void Inputs()
+    {
         float horizontal = Input.GetAxis("Horizontal");
         float vertical = Input.GetAxis("Vertical");
 
         move = new Vector2(horizontal, vertical).normalized;
+
+        float camYaw = Input.GetAxis("Mouse X");
+        float camPitch = Input.GetAxis("Mouse Y");
+
+        look = new Vector2(camYaw, camPitch);
 
         if (Input.GetKey(KeyCode.LeftShift) && (horizontal != 0 || vertical != 0))
         {
@@ -40,6 +50,16 @@ public class PlayerInputs : MonoBehaviour
         else
         {
             sprint = false;
+        }
+
+        if (Input.GetButton("Jump"))
+        {
+            Debug.Log("Should be jumping");
+            jump = true;
+        }
+        else
+        {
+            jump = false;
         }
     }
 

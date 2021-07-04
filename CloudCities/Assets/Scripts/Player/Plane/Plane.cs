@@ -113,7 +113,7 @@ public class Plane : MonoBehaviour
 
         if (landed == false)
         {
-            docking = Physics.CheckSphere(transform.position, dockingRange, dockingLayerMask, QueryTriggerInteraction.Ignore);
+            docking = Physics.CheckSphere(transform.position, dockingRange, dockingLayerMask);
          
             #region temp code commented out
             /*if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out dockingHit, dockingRange, dockingLayerMask) ||
