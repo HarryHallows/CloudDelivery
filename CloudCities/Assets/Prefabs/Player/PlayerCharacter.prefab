@@ -914,14 +914,25 @@ MonoBehaviour:
   Grounded: 1
   GroundedOffset: -0.14
   GroundedRadius: 0.28
+  jumpTimer: 0
+  startJumpTimer: 1
   GroundLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 320
   CinemachineCameraTarget: {fileID: 0}
   TopClamp: 70
   BottomClamp: -30
   CameraAngleOverride: 0
   LockCameraPosition: 0
+  cam: {fileID: 0}
+  planeCam: {fileID: 0}
+  interacting: 0
+  interactRange: 1.14
+  interactLayer:
+    serializedVersion: 2
+    m_Bits: 512
+  plane: {fileID: 0}
+  planeControl: {fileID: 0}
   _animator: {fileID: 0}
 --- !u!143 &498244
 CharacterController:
