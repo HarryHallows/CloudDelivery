@@ -55,6 +55,10 @@ public class Plane : MonoBehaviour
     [SerializeField] private GameObject playerCharacter;
     [SerializeField] private Vector3 exitPlanePosition;
 
+
+    [Header("PlaneAnimations")]
+    [SerializeField] private GameObject propellerObj;
+
     private void OnEnable()
     {
         cam.gameObject.SetActive(true);
@@ -98,7 +102,12 @@ public class Plane : MonoBehaviour
             Debug.DrawRay(transform.position, transform.TransformDirection(-Vector3.up) * landingHit.distance, Color.white);
             landed = true;
             canDock = false;
-            docking = false;
+
+            if (docking == true)
+            {
+                docking = false;
+                thrust = 0;
+            }
         }
         else //We're then checking the opposite of landing which basically tells us that we're airborne 
         {
@@ -205,6 +214,9 @@ public class Plane : MonoBehaviour
 
     private void Movement()
     {
+
+        propellerObj.transform.Rotate(thrust, 0, 0);
+
         if (takeOff == true)
         {
             //CHECKS FOR IF THE PLAYER HAS FUEL
@@ -315,6 +327,8 @@ public class Plane : MonoBehaviour
                     }
                 }
             }
+
+
         }
 
         if (docking == true)

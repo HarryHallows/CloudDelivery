@@ -193,8 +193,12 @@ public class PlayerController : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.E))
                 {
+
+                    Debug.Log("IM PRESSING THE DAMN BUTTON");
+
                     if (interactHit.collider.name == "LightPlane")
                     {
+                        Debug.Log("Board plane please???");
                         BoardPlane();
                     }
 
@@ -213,6 +217,7 @@ public class PlayerController : MonoBehaviour
 
     private void BoardPlane()
     {
+        Debug.Log("SHould be boarding plane now");
         cam.gameObject.SetActive(false);
         planeCam.gameObject.SetActive(true);
         planeControl.enabled = true;
