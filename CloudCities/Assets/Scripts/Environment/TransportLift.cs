@@ -23,15 +23,17 @@ public class TransportLift : MonoBehaviour
         
     }
 
-    public void Lift(Transform _playerPos)
+    public void Lift(GameObject _player)
     {
         goingDown = !goingDown;
 
-        _playerPos = passengerPosition;
+        _player.transform.position = passengerPosition.transform.position;
+
+        Debug.Log(_player.transform.position = passengerPosition.transform.position);
 
         if (goingDown == true)
         {
-
+            //make baloon move towards lift target position
         }
     }
 

@@ -204,8 +204,8 @@ public class PlayerController : MonoBehaviour
 
                     if (interactHit.collider.name == "balloon")
                     {
-                        interactHit.collider.gameObject.GetComponent<TransportLift>().Lift(gameObject.transform);
-                        
+                        Debug.Log("Look I want to ride your hot balloon please");
+                        interactHit.collider.gameObject.GetComponent<TransportLift>().Lift(gameObject);
                     }
                 }
               
@@ -387,7 +387,7 @@ public class PlayerController : MonoBehaviour
         return Mathf.Clamp(lfAngle, lfMin, lfMax);
     }
 
-    private void OnDrawGizmosSelected()
+    private void OnDrawGizmos()
     {
         Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
         Color transparentRed = new Color(1.0f, 0.0f, 0.0f, 0.35f);
