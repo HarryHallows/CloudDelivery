@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(PlayerInputs))]
 public class PlayerController : MonoBehaviour
@@ -188,19 +189,23 @@ public class PlayerController : MonoBehaviour
 
             if (Physics.SphereCast(transform.position, _controller.height / 2, transform.forward, out interactHit, interactRange, interactLayer))
             {
-                Debug.Log(interactHit.collider.name);
+               //Debug.Log(interactHit.collider.name);
 
                 if (Input.GetKeyDown(KeyCode.E))
                 {
+
+                    Debug.Log("IM PRESSING THE DAMN BUTTON");
+
                     if (interactHit.collider.name == "LightPlane")
                     {
+                        Debug.Log("Board plane please???");
                         BoardPlane();
                     }
 
                     if (interactHit.collider.name == "balloon")
                     {
-                        interactHit.collider.gameObject.GetComponent<TransportLift>().Lift(gameObject.transform);
-                        
+                        Debug.Log("Look I want to ride your hot balloon please");
+                        interactHit.collider.gameObject.GetComponent<TransportLift>().Lift(gameObject);
                     }
                 }
               
@@ -212,6 +217,7 @@ public class PlayerController : MonoBehaviour
 
     private void BoardPlane()
     {
+        Debug.Log("SHould be boarding plane now");
         cam.gameObject.SetActive(false);
         planeCam.gameObject.SetActive(true);
         planeControl.enabled = true;
@@ -381,7 +387,7 @@ public class PlayerController : MonoBehaviour
         return Mathf.Clamp(lfAngle, lfMin, lfMax);
     }
 
-    private void OnDrawGizmosSelected()
+    private void OnDrawGizmos()
     {
         Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
         Color transparentRed = new Color(1.0f, 0.0f, 0.0f, 0.35f);

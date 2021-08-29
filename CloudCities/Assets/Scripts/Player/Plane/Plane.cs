@@ -39,7 +39,7 @@ public class Plane : MonoBehaviour
     private bool rollOverride, pitchOverride;
 
     [Header("FlightConditions")]
-    [SerializeField] private bool takeOff, docking, dockingCollide, landed;
+    [SerializeField] private bool takeOff, canDock, docking, dockingCollide, landed;
 
     [Header("Landing")]
     [SerializeField] private float landingTime, landingCheckRange, dockingRange;
@@ -51,8 +51,13 @@ public class Plane : MonoBehaviour
     private Vector3 velocity = Vector3.zero;
 
     [Header("ExitingPlane")]
+    [SerializeField] private float exitTimer = 0.5f;
     [SerializeField] private GameObject playerCharacter;
     [SerializeField] private Vector3 exitPlanePosition;
+
+
+    [Header("PlaneAnimations")]
+    [SerializeField] private GameObject propellerObj;
 
     private void OnEnable()
     {
@@ -60,7 +65,7 @@ public class Plane : MonoBehaviour
         characterCam.gameObject.SetActive(false);
         playerCharacter.SetActive(false);
 
-        Debug.Log("Turning on Plane and off player");
+        //Debug.Log("Turning on Plane and off player");
     }
 
     // Start is called before the first frame update
@@ -87,16 +92,24 @@ public class Plane : MonoBehaviour
         Movement();
     }
 
+    //CHECKS FOR DIFFERENT POSITIONAL CONDITIONS ON IF THE PLANE IS LANDED/AIRBORNE/DOCKING
     private void RayChecks()
     {
+        //Checking if our raycast is hitting the landing zone which then determineds that the player has re-entered the landing zone
         if (Physics.Raycast(transform.position, transform.TransformDirection(-Vector3.up), out landingHit, landingCheckRange, landingLayerMask))
         {
             Debug.Log("Hitting Runway");
             Debug.DrawRay(transform.position, transform.TransformDirection(-Vector3.up) * landingHit.distance, Color.white);
             landed = true;
-            docking = false;
+            canDock = false;
+
+            if (docking == true)
+            {
+                docking = false;
+                thrust = 0;
+            }
         }
-        else
+        else //We're then checking the opposite of landing which basically tells us that we're airborne 
         {
             Debug.Log("Not Hitting runway");
 
@@ -104,57 +117,114 @@ public class Plane : MonoBehaviour
 
             landed = false;
 
-            if (docking != true)
+            if (docking == false)
             {
+                Debug.Log("WHY AM I BEING CALLED T_T");
                 takeOff = true;
+            }
+            else
+            {
+                takeOff = false;
             }
 
         }
 
         if (landed == false)
         {
-            docking = Physics.CheckSphere(transform.position, dockingRange, dockingLayerMask);
-         
-            #region temp code commented out
-            /*if (Physics.Raycast(transform.position, transform.TransformDirection(Vector3.forward), out dockingHit, dockingRange, dockingLayerMask) ||
-           Physics.Raycast(transform.position, transform.TransformDirection(Vector3.back), out dockingHit, dockingRange, dockingLayerMask) ||
-           Physics.Raycast(transform.position, transform.TransformDirection(Vector3.up), out dockingHit, dockingRange, dockingLayerMask) ||
-           Physics.Raycast(transform.position, transform.TransformDirection(Vector3.down), out dockingHit, dockingRange, dockingLayerMask))
-            {
-                Debug.Log("hitting dock box");
-                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * dockingHit.distance, Color.blue);
-                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.back) * dockingHit.distance, Color.blue);
-                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.up) * dockingHit.distance, Color.blue);
-                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down) * dockingHit.distance, Color.blue);
+            canDock = Physics.CheckSphere(transform.position, dockingRange, dockingLayerMask);
 
-                if (dockingHit.collider.tag == "LandingZone")
-                {
-                    Debug.Log("Docking Attempt");
-                    landingTarget = dockingHit.collider.gameObject.transform.GetChild(0).gameObject;
-                    docking = true;
-                }
-            }
-            else
-            {
-                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.forward) * dockingHit.distance, Color.red);
-                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.back) * dockingHit.distance, Color.red);
-                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.up) * dockingHit.distance, Color.red);
-                Debug.DrawRay(transform.position, transform.TransformDirection(Vector3.down) * dockingHit.distance, Color.red);
-            }*/
-            #endregion
+            Debug.Log($"{canDock = Physics.CheckSphere(transform.position, dockingRange, dockingLayerMask)} + Docking: {canDock}");
         }
 
+        if (canDock == true)
+        {
+            if (Physics.SphereCast(transform.position, dockingRadius, transform.forward, out dockingHit, dockingRange, dockingLayerMask))
+            {
+                Debug.Log("hitting dock box && AND UPDATING LANDING POSITION");
+                landingTarget = dockingHit.collider.gameObject.transform.GetChild(0).gameObject;
+            }
+        }
 
+       
+    }
+
+
+    //INPUT CHECKS FOR FROM THE PLAYER WHILE BOARDED INTO THE PLANE 
+    private void Inputs(float _roll, float _pitch)
+    {
+        rollOverride = false;
+        pitchOverride = false;
+
+        if (Mathf.Abs(_roll) > .25f)
+        {
+            roll = _roll * rollMultiplier;
+            rollOverride = true;
+        }
+        else
+        {
+            roll = 0;
+        }
+
+        if (Mathf.Abs(_pitch) > .25f)
+        {
+            pitch = _pitch;
+
+            pitchOverride = true;
+            rollOverride = true;
+        }
+        else
+        {
+            pitch = 0f;
+        }
+
+        yaw = 0f;
+
+
+        if (Input.GetButton("Fire1"))
+        {
+            Debug.Log("Pew pew pew");
+
+        }
+
+        if (Input.GetButton("Fire2"))
+        {
+            AutoPilot(new Vector3(transform.position.x, transform.position.y, transform.position.z), out yaw, out pitch, out roll);
+        }
+        else
+        {
+            cam.GetComponent<CinemachineFreeLook>().m_XAxis.m_MaxSpeed = 0f;
+        }
+
+        if (Input.GetButton("Interact") && canDock == true)
+        {
+            Debug.Log("START DOCKING PLEASE!!?!");
+
+            docking = true;
+        }
+        else if(Input.GetButton("Interact") && landed == true && exitTimer <= 0)
+        {
+            ExitPlane();
+            Debug.Log("CAN'T DOCK BUT INTERACT BUTTON DOWN");
+        }
+        else
+        {
+            Debug.Log("INTERACT BUTTON NOT DOWN");
+        }
     }
 
     private void Movement()
     {
+
+        propellerObj.transform.Rotate(thrust, 0, 0);
+
         if (takeOff == true)
         {
+            //CHECKS FOR IF THE PLAYER HAS FUEL
             if (fuel > 0)
             {
-                if (thrust <= 10 && (!docking || !landed))
+                if (thrust <= 10)
                 {
+                    Debug.Log("DIVING FROM NOT ENOUGH THRUST");
                     rb.useGravity = true;
 
                     Quaternion desiredRotation = transform.rotation = Quaternion.Euler(90f, transform.rotation.y, transform.rotation.z);
@@ -220,7 +290,14 @@ public class Plane : MonoBehaviour
         {
             if (landed == true)
             {
+                if (exitTimer > 0)
+                {
+                    exitTimer -= Time.deltaTime;
+                }
+
                 fuel = startFuel;
+
+                Debug.Log("Landed");
 
                 if (Input.GetKey(KeyCode.LeftShift))
                 {
@@ -240,29 +317,23 @@ public class Plane : MonoBehaviour
 
                 if (thrust <= 0)
                 {
-                    if (Input.GetKeyDown(KeyCode.E))
+
+                    Debug.Log("Could leave the plane if player wants too");
+
+                    if (Input.GetButtonDown("Interact"))
                     {
+                        Debug.Log("Exiting the plane");
                         ExitPlane();
                     }
                 }
             }
+
+
         }
 
         if (docking == true)
         {
-            if (Physics.SphereCast(transform.position, dockingRadius, transform.forward, out dockingHit, dockingRange, dockingLayerMask))
-            {
-                Debug.Log("hitting dock box");
-
-                if (Input.GetKey(KeyCode.E))
-                {
-                    Debug.Log("Docking Attempt");
-                    landingTarget = dockingHit.collider.gameObject.transform.GetChild(0).gameObject;
-
-                    StartCoroutine(Docking());
-                }
-            }
-
+            StartCoroutine(Docking());
         }
 
     }
@@ -273,15 +344,16 @@ public class Plane : MonoBehaviour
         playerCharacter.SetActive(true);
         cam.gameObject.SetActive(false);
         characterCam.gameObject.SetActive(true);
+        exitTimer = 0.5f;
     }
 
     private IEnumerator Docking()
     {
         Debug.Log("Docking in Process");
         takeOff = false;
-        rb.useGravity = false;
         thrust = 0;
-
+        rb.useGravity = false;
+        
         Quaternion dockingRotation = Quaternion.identity;
         transform.rotation = Quaternion.Slerp(transform.rotation, dockingRotation, 0.5f * Time.deltaTime);
 
@@ -290,58 +362,9 @@ public class Plane : MonoBehaviour
         // Smoothly move the camera towards that target position
         transform.position = Vector3.SmoothDamp(transform.position, targetPosition, ref velocity, landingTime);
 
-        docking = false;
-
         yield return new WaitForSeconds(landingTime);
     }
 
-
-    private void Inputs(float _roll, float _pitch)
-    {
-        rollOverride = false;
-        pitchOverride = false;
-
-        if (Mathf.Abs(_roll) > .25f)
-        {
-            roll = _roll * rollMultiplier;
-            rollOverride = true;
-        }
-        else
-        {
-            roll = 0;
-        }
-
-        if (Mathf.Abs(_pitch) > .25f)
-        {
-            pitch = _pitch;
-
-            pitchOverride = true;
-            rollOverride = true;
-        }
-        else
-        {
-            pitch = 0f;
-        }
-
-        yaw = 0f;
-
-
-        if (Input.GetButton("Fire1"))
-        {
-            Debug.Log("Pew pew pew");
-
-        }
-
-        if (Input.GetButton("Fire2"))
-        {
-            AutoPilot(new Vector3(transform.position.x, transform.position.y, transform.position.z), out yaw, out pitch, out roll);
-        }
-        else
-        {
-            cam.GetComponent<CinemachineFreeLook>().m_XAxis.m_MaxSpeed = 0f;
-        }
-
-    }
 
     private void AutoPilot(Vector3 flyingTarget, out float yaw, out float pitch, out float roll)
     {
@@ -420,7 +443,7 @@ public class Plane : MonoBehaviour
         Color transparentGreen = new Color(0.0f, 1.0f, 0.0f, 0.35f);
         Color transparentRed = new Color(1.0f, 0.0f, 0.0f, 0.35f);
 
-        if (docking) Gizmos.color = transparentGreen;
+        if (canDock) Gizmos.color = transparentGreen;
         else Gizmos.color = transparentRed;
     }
 }

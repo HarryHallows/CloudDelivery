@@ -43,13 +43,16 @@ public class CharacterNavigationController : MonoBehaviour
 
     private void CharacterMovement()
     {
+        //If the attached character has not reached the "destination" (next waypoint Node)
         if (transform.position != destination)
         {
+            //Move towards the destinations position 
             Vector3 destinationDirection = destination - transform.position;
             destinationDirection.y = 0;
 
             float destinationDistance = destinationDirection.magnitude;
-
+            
+            //If character hasn't reached destination then calculate the look rotation to the direction of the next node
             if (destinationDistance >= stopDistance)
             {
                 reachedDestination = false;
@@ -63,6 +66,7 @@ public class CharacterNavigationController : MonoBehaviour
             }
             else
             {
+                //Otherwise destination has been reached
                 reachedDestination = true;
             }
 
@@ -73,40 +77,16 @@ public class CharacterNavigationController : MonoBehaviour
             velocity = velocity.normalized;
             var forwardDotProduct = Vector3.Dot(transform.forward, velocity);
             var rightDotProduct = Vector3.Dot(transform.right, velocity);
-
-
-            // _animator.SetFloat("Horizontal", rightDotProduct);
-            // _animator.SetFloat("Forward", forwardDotProduct);
-
         }
 
         lastPosition = transform.position;
     }
 
+    //Reset the destination node
     public void SetDestination(Vector3 destination)
     {
         this.destination = destination;
         reachedDestination = false;
     }
-
-    /*
-    // public float startDestroyTime = 2f;
-    //private float destroyTime;
-
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.gameObject.tag == ("DestroyerTerrain"))
-        {
-            destroyTime--;
-
-            if (destroyTime <= 0)
-            {
-                Destroy(this.gameObject);
-                destroyTime = startDestroyTime;
-            }
-
-        }
-    }
-    */
 
 }

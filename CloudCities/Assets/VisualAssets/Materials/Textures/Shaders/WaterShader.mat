@@ -20,11 +20,11 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _MainNormal:
-        m_Texture: {fileID: 2800000, guid: fc0a2dba16e60a14e877007f9ab3562a, type: 3}
+        m_Texture: {fileID: 2800000, guid: bad8acfcd223c294cb4df362b012ca4a, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _SecondNormal:
-        m_Texture: {fileID: 2800000, guid: 27b0d5326c8133741b3470d60faeb510, type: 3}
+        m_Texture: {fileID: 2800000, guid: 579108035bb0f1f49ba90ca24c010270, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -40,12 +40,12 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     m_Floats:
-    - _Depth: 0
+    - _Depth: 47.59
     - _Displacement: 0.5
-    - _NormalStrength: 0.06
-    - _Smoothness: 0.92
-    - _Strength: 0.06
+    - _NormalStrength: 0.13
+    - _Smoothness: 0.88
+    - _Strength: 1.04
     m_Colors:
-    - _DeepColour: {r: 0, g: 0.666667, b: 1, a: 0.5960785}
-    - _ShallowColour: {r: 0.5929602, g: 0.6093169, b: 0.6132076, a: 0.4745098}
+    - _DeepColour: {r: 0, g: 0.27672967, b: 0.41509432, a: 0.5960785}
+    - _ShallowColour: {r: 1, g: 1, b: 1, a: 0.4745098}
   m_BuildTextureStacks: []

@@ -17,9 +17,9 @@ public class PedestrianSpawner : MonoBehaviour
         StartCoroutine(Spawn());
     }
 
+    //This could be improved by object pooling if we want to continue to spawn new pedestrians in and out of space
     IEnumerator Spawn()
     {
-
         int count = 0;
         while (count < pedestrianToSpawn)
         {
