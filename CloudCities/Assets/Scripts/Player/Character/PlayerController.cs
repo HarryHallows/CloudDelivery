@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Cinemachine;
+
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(PlayerInputs))]
 public class PlayerController : MonoBehaviour
@@ -188,7 +189,7 @@ public class PlayerController : MonoBehaviour
 
             if (Physics.SphereCast(transform.position, _controller.height / 2, transform.forward, out interactHit, interactRange, interactLayer))
             {
-                Debug.Log(interactHit.collider.name);
+               //Debug.Log(interactHit.collider.name);
 
                 if (Input.GetKeyDown(KeyCode.E))
                 {

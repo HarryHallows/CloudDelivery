@@ -10,6 +10,10 @@ public class LandingZone : MonoBehaviour
     [SerializeField] private Color color;
     [SerializeField] private bool changeAlpha = false;
 
+
+    //Radius Check for the island
+    public float landingRadius = 20f;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -20,33 +24,12 @@ public class LandingZone : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        //BlinkAnim();
+
     }
 
-    private void BlinkAnim()
+    private void OnDrawGizmos()
     {
-        mat.color = color;
-
-        //Debug.Log(color);
-
-        if (color.a >= 1 && changeAlpha != true)
-        {
-            changeAlpha = true;
-        }
-
-        if (color.a <= 0 && changeAlpha != false)
-        {
-            changeAlpha = false;
-        }
-
-
-        if (changeAlpha == true)
-        {
-            color.a += 1 * Time.deltaTime;
-        }
-        else
-        { 
-            color.a -= 1 * Time.deltaTime;   
-        }
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.position, landingRadius);
     }
 }
